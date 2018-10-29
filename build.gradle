@@ -1,0 +1,57 @@
+buildscript {
+    ext {
+            springBootVersion       = '2.0.1.RELEASE'
+    }
+    repositories {
+        maven { url 'http://repo.spring.io/plugins-release' }
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}"
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.3.0'
+}
+apply plugin: 'org.springframework.boot'
+
+group 'com.fredboat'
+version '1.0'
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+configurations {
+    compile.exclude module: 'opus-java'
+}
+
+dependencies {
+    compile group: 'net.dv8tion', name: 'JDA', version: '3.8.1_439'
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+bootRun {
+    //compiling tests during bootRun increases the likelihood of catching broken tests locally instead of on the CI
+    dependsOn compileTestJava
+
+    //pass in custom jvm args
+    // source: https://stackoverflow.com/a/25079415
+    // example: ./gradlew bootRun -PjvmArgs="--illegal-access=debug -Dwhatever=value"
+    if (project.hasProperty('jvmArgs')) {
+        jvmArgs project.jvmArgs.split('\\s+')
+    }
+}
+
+bootJar {
+    archiveName = "memtest.jar"
+}
