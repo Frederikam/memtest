@@ -20,6 +20,9 @@ class Memtest : ListenerAdapter() {
         val shardsMax = console.readLine().toInt()
         builder.setShards(shardsMin, shardsMax)
 
+        println("Enter IDENTIFY delay in seconds, minimum 5 seconds")
+        builder.setSessionController(DelayedSessionController(console.readLine().toLong()))
+
         println("Enter bot token")
         builder.setToken(String(console.readPassword()))
         val shards = builder.build()
