@@ -12,19 +12,19 @@ class Memtest : ListenerAdapter() {
         builder.addEventListeners(this)
 
         println("Enter shard count")
-        builder.setShardsTotal(console.readLine().toInt())
+        builder.setShardsTotal(console.readLine().trim().toInt())
 
         println("Enter shard range start (inclusive)")
-        val shardsMin = console.readLine().toInt()
+        val shardsMin = console.readLine().trim().toInt()
         println("Enter shard range end (inclusive)")
-        val shardsMax = console.readLine().toInt()
+        val shardsMax = console.readLine().trim().toInt()
         builder.setShards(shardsMin, shardsMax)
 
-        println("Enter IDENTIFY delay in seconds, minimum 5 seconds")
-        builder.setSessionController(DelayedSessionController(console.readLine().toLong()))
+        println("Enter IDENTIFY delay in milliseconds, minimum 5000ms")
+        builder.setSessionController(DelayedSessionController(console.readLine().trim().toLong()))
 
         println("Enter bot token")
-        builder.setToken(String(console.readPassword()))
+        builder.setToken(String(console.readPassword()).trim())
         val shards = builder.build()
 
         while (true) {
